@@ -23,4 +23,20 @@ steps:
     failOnStandardError: true
   continueOnError: false
   enabled: true
-  
+
+- task: CopyFiles@2
+  displayName: copy files to artifact stagging directory
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+    preserveTimestamp: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'vnet_config_data'
+    publishLocation: 'Container'
+  condition: succeeded()
